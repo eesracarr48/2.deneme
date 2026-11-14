@@ -1092,21 +1092,25 @@ html[data-view="mobile"] header h1{font-size:30px}
 .size-card.on{border-color:var(--c); box-shadow:0 0 0 3px var(--c) inset}
 .sc-top{display:flex; justify-content:space-between; align-items:center} .sc-top b{font-size:17px}
 .sc-dims, .sc-kg{font-size:13.5px} .sc-like{font-size:12.5px; color:var(--muted); font-style:italic}
-.size-wrap{display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:16px; align-items:start}
-@media (max-width:860px){ .size-wrap{grid-template-columns:1fr} }
-html[data-view="mobile"] .size-wrap{grid-template-columns:1fr}
+.size-wrap{display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:14px 16px; align-items:start;
+  grid-template-areas:"stage ctl" "photo ctl" "info ctl"}
+.sz-stagebox{grid-area:stage; min-width:0} .sz-photo{grid-area:photo} #szInfo{grid-area:info} .size-side{grid-area:ctl}
+@media (max-width:860px){ .size-wrap{grid-template-columns:1fr; grid-template-areas:"stage" "photo" "ctl" "info"} }
+html[data-view="mobile"] .size-wrap{grid-template-columns:1fr; grid-template-areas:"stage" "photo" "ctl" "info"}
 #sizeStage{border-radius:18px; overflow:hidden; border:2px solid var(--line,#2d3a7a); background:#0b1026; position:relative; touch-action:none}
 #sizeStage svg{display:block; width:100%; height:auto; max-height:520px}
 #sizeStage.flash::after{content:""; position:absolute; inset:0; background:#fff; animation:flash .5s ease-out forwards; pointer-events:none}
 @keyframes flash{from{opacity:.9} to{opacity:0}}
-.sz-hint{font-size:13px; color:var(--muted); margin:8px 2px}
+.sz-hint{font-size:13px; color:var(--muted); margin:8px 2px 0}
 .size-side .panel{margin:0; max-width:none; padding:16px}
 .sz-row{display:grid; grid-template-columns:1fr 1fr; gap:8px}
 .sz-row label{font-weight:600; font-size:14px; display:flex; flex-direction:column; gap:4px}
 .sz-row input{width:100%; font:inherit; font-size:16px; padding:9px 10px; border-radius:12px; border:2px solid var(--line,#2d3a7a); background:var(--bg2); color:var(--text); box-sizing:border-box}
 .sz-lbl{font-weight:600; font-size:14px; margin:12px 0 6px}
 #szInfo p{margin:6px 0; line-height:1.45; font-size:15px}
-.sz-photo{margin-top:16px}
+.sz-photo{margin:0; max-width:none; padding:14px 16px}
+.sz-photo .links{margin-top:8px}
+#szInfo{margin:0; max-width:none}
 .sz-photo input{width:100%; box-sizing:border-box; font:inherit; font-size:16px; padding:11px 12px; border-radius:12px; border:2px solid var(--line,#2d3a7a); background:var(--bg2); color:var(--text)}
 #szPhoto{display:block; width:100%; max-width:720px; margin:14px auto 0; border-radius:6px; box-shadow:0 10px 30px rgba(0,0,0,.35); transform:rotate(-1.2deg)}
 @media (max-width:700px){
@@ -1117,6 +1121,41 @@ html[data-view="mobile"] .size-wrap{grid-template-columns:1fr}
 html[data-view="mobile"] .size-list{display:flex; overflow-x:auto; scroll-snap-type:x mandatory; padding-bottom:6px}
 html[data-view="mobile"] .size-card{min-width:230px; scroll-snap-align:start}
 html[data-view="mobile"] #sizeStage svg{height:300px; max-height:none}
+#szPhoto[hidden]{display:none}
+
+/* sürükleme göstergesi */
+.sz-arr{transform-box:fill-box; transform-origin:center; animation:szNudgeR 1.1s ease-in-out infinite}
+.sz-l{animation-name:szNudgeL}
+@keyframes szNudgeR{0%,100%{transform:translateX(0)} 50%{transform:translateX(30%)}}
+@keyframes szNudgeL{0%,100%{transform:translateX(0)} 50%{transform:translateX(-30%)}}
+.sz-drag.done .sz-arr{animation:none; opacity:.55}
+.sz-bubble{animation:szBob 1.4s ease-in-out infinite; transform-box:fill-box}
+@keyframes szBob{0%,100%{transform:translateY(0)} 50%{transform:translateY(-8%)}}
+#szPerson:focus{outline:none} #szPerson:focus-visible .sz-arr path{stroke:#fff}
+.sz-move{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:8px; font-size:13.5px; color:var(--muted); text-align:center}
+.sz-move .btn{margin:0; padding:8px 14px; font-size:14px; flex-shrink:0}
+@media (prefers-reduced-motion:reduce){ .sz-arr, .sz-bubble{animation:none} }
+
+/* 🏁 Hepsi bir arada kartı — araç kartlarından farklı: geniş, kesik çizgili, mini sıralama grafiği */
+.sz-allcard{all:unset; box-sizing:border-box; cursor:pointer; display:flex; align-items:stretch; gap:16px; width:100%; margin:0 0 12px;
+  padding:14px 16px; border-radius:20px; border:2px dashed #ffd166; color:var(--text);
+  background:linear-gradient(120deg,rgba(76,201,240,.16),rgba(199,125,255,.16) 55%,rgba(255,209,102,.16)); transition:.15s}
+.sz-allcard:hover{transform:translateY(-2px); border-style:solid}
+.sz-allcard.on{border-style:solid; box-shadow:0 0 0 3px #ffd166 inset, 0 0 22px rgba(255,209,102,.35)}
+.sa-txt{display:flex; flex-direction:column; gap:4px; flex:1 1 55%; min-width:0}
+.sa-txt b{font-size:19px} .sa-txt span{font-size:14px; line-height:1.4} .sa-txt i{font-size:13px; color:#ffd166; font-style:normal; font-weight:600}
+.sa-bars{flex:1 1 45%; display:flex; align-items:flex-end; gap:4px; height:78px; padding:6px 8px 0; border-bottom:3px solid rgba(255,255,255,.35)}
+.sa-bars span{flex:1; border-radius:5px 5px 0 0; min-width:5px; box-shadow:inset 0 -2px 0 rgba(0,0,0,.25)}
+@media (max-width:700px){ .sz-allcard{flex-direction:column; gap:10px} .sa-bars{flex:none; height:56px} }
+html[data-view="mobile"] .sz-allcard{flex-direction:column; gap:10px}
+html[data-view="mobile"] .sa-bars{flex:none; height:56px}
+#sizeStage.pano{overflow-x:auto; overflow-y:hidden; scrollbar-color:#ffd166 rgba(255,255,255,.08)}
+#sizeStage.pano::-webkit-scrollbar{height:10px} #sizeStage.pano::-webkit-scrollbar-thumb{background:#ffd166; border-radius:8px}
+#sizeStage.pano svg{cursor:grab}
+.sz-jump{margin:0 0 8px} .sz-jump[hidden]{display:none}
+.sz-off{opacity:.4; pointer-events:none}
+#sizeStage{max-width:100%}
+
 </style>
 </head>
 <body>
@@ -1131,7 +1170,7 @@ html[data-view="mobile"] #sizeStage svg{height:300px; max-height:none}
   <button data-tab="heroes" class="active">🦸 Meet the Heroes</button>
   <button data-tab="explore">🌌 Explore Space</button>
   <button data-tab="mapSec">🗺️ Map</button>
-  <button data-tab="sizes">📏 Sizes</button>
+<button data-tab="sizes">📏 Sizes</button>
   <button data-tab="models3d">🧊 3D Models</button>
   <button data-tab="quiz">❓ Which Hero Are You?</button>
   <button data-tab="build">🛠️ Build Your Hero</button>
@@ -1177,19 +1216,17 @@ html[data-view="mobile"] #sizeStage svg{height:300px; max-height:none}
     <p class="lead" id="sizesLead"></p>
     <div class="size-list" id="sizeList"></div>
     <div class="size-wrap">
-      <div>
+      <div class="sz-stagebox">
         <div id="sizeStage"></div>
-        <p class="sz-hint" id="szHint"></p>
+        <div class="sz-move" id="szMove"></div>
       </div>
-      <div class="size-side">
-        <div class="panel" id="sizeCtl"></div>
-        <div class="panel" id="szInfo" style="margin-top:12px"></div>
+      <div class="panel sz-photo">
+        <input type="text" id="szCaption" maxlength="60">
+        <div class="links"><button type="button" class="btn" id="szShoot"></button><button type="button" class="btn ghost" id="szDownload" hidden></button></div>
+        <canvas id="szPhoto" hidden></canvas>
       </div>
-    </div>
-    <div class="sz-photo">
-      <input type="text" id="szCaption" maxlength="60">
-      <div class="links"><button type="button" class="btn" id="szShoot"></button><button type="button" class="btn ghost" id="szDownload" hidden></button></div>
-      <canvas id="szPhoto" hidden></canvas>
+      <div class="panel" id="szInfo"></div>
+      <div class="size-side"><div class="panel" id="sizeCtl"></div></div>
     </div>
   </section>
 
@@ -4053,27 +4090,27 @@ const MAP_SITES = [
   if (!sec) return;
 
   const SIZE_ITEMS = [
-    { id: "sojourner", name: "Sojourner", shape: "rover", world: "Mars", L: .65, H: .30, kg: 10.6, color: "#8ecae6",
+    { id: "sojourner", name: "Sojourner", shape: "rover", world: "Mars", L: .65, H: .30, kg: 10.6, color: "#8ecae6", body: "#d9dde6",
       dims: T("65 cm long · 30 cm tall", "65 cm uzun · 30 cm yüksek"), like: T("about the size of a microwave oven", "bir mikrodalga fırın kadar") },
-    { id: "ingenuity", name: "Ingenuity", shape: "heli", world: "Mars", L: 1.2, H: .49, kg: 1.8, color: "#4cc9f0",
+    { id: "ingenuity", name: "Ingenuity", shape: "heli", world: "Mars", L: 1.2, H: .49, kg: 1.8, color: "#4cc9f0", body: "#d8b45a",
       dims: T("49 cm tall · rotors 1.2 m wide", "49 cm yüksek · pervaneler 1,2 m genişliğinde"), like: T("as tall as a cat standing up, as light as a big bottle of water", "ayağa kalkmış bir kedi kadar uzun, büyük bir su şişesi kadar hafif") },
-    { id: "mer", name: "Spirit / Opportunity", shape: "rover", world: "Mars", L: 1.6, H: 1.5, kg: 185, color: "#f4a261",
+    { id: "mer", name: "Spirit / Opportunity", shape: "rover", world: "Mars", L: 1.6, H: 1.5, kg: 185, color: "#ffb703", body: "#efe9dc",
       dims: T("1.6 m long · 1.5 m tall · 2.3 m wide", "1,6 m uzun · 1,5 m yüksek · 2,3 m geniş"), like: T("about as big as a golf cart", "bir golf arabası kadar") },
-    { id: "insight", name: "InSight", shape: "lander", world: "Mars", L: 6.0, H: 1.0, kg: 358, color: "#c77dff",
+    { id: "insight", name: "InSight", shape: "lander", world: "Mars", L: 6.0, H: 1.0, kg: 358, color: "#c77dff", body: "#e6dccb",
       dims: T("≈1 m tall · 6 m wide with solar panels", "≈1 m yüksek · güneş panelleriyle 6 m geniş"), like: T("as wide as a big classroom wall", "büyük bir sınıf duvarı kadar geniş") },
-    { id: "phoenix", name: "Phoenix", shape: "lander", world: "Mars", L: 5.5, H: 2.2, kg: 350, color: "#ffd166", mast: true,
+    { id: "phoenix", name: "Phoenix", shape: "lander", world: "Mars", L: 5.5, H: 2.2, kg: 350, color: "#ff8fab", body: "#f2efe6", mast: true,
       dims: T("2.2 m tall · 5.5 m wide with solar panels", "2,2 m yüksek · güneş panelleriyle 5,5 m geniş"), like: T("taller than a basketball player", "bir basketbolcudan uzun") },
-    { id: "viking", name: "Viking 1 & 2", shape: "viking", world: "Mars", L: 3.0, H: 2.0, kg: 600, color: "#e9ecef",
+    { id: "viking", name: "Viking 1 & 2", shape: "viking", world: "Mars", L: 3.0, H: 2.0, kg: 600, color: "#e9ecef", body: "#c9ccd3",
       dims: T("≈2 m tall · ≈3 m across", "≈2 m yüksek · ≈3 m genişlik"), like: T("about as big as a small car", "küçük bir araba kadar") },
-    { id: "lrv", name: T("Moon Buggy (LRV)", "Ay Arabası (LRV)"), shape: "buggy", world: "Moon", L: 3.1, H: 1.14, kg: 210, color: "#adb5bd",
+    { id: "lrv", name: T("Moon Buggy (LRV)", "Ay Arabası (LRV)"), shape: "buggy", world: "Moon", L: 3.1, H: 1.14, kg: 210, color: "#adb5bd", body: "#b8bcc6",
       dims: T("3.1 m long · 1.14 m tall", "3,1 m uzun · 1,14 m yüksek"), like: T("about as long as a small car", "küçük bir araba kadar uzun") },
-    { id: "lm", name: T("Apollo Lunar Module", "Apollo Ay Modülü"), shape: "lm", world: "Moon", L: 9.4, H: 7.0, kg: 15000, color: "#ffd166",
+    { id: "lm", name: T("Apollo Lunar Module", "Apollo Ay Modülü"), shape: "lm", world: "Moon", L: 9.4, H: 7.0, kg: 15000, color: "#ffd166", body: "#d9a521",
       dims: T("7 m tall · 9.4 m across the legs (the bottom half stayed on the Moon)", "7 m yüksek · bacaklar arası 9,4 m (alt yarısı Ay'da kaldı)"), like: T("as tall as a two-storey house", "iki katlı bir ev kadar yüksek") },
-    { id: "mirror", name: T("Laser Mirror", "Lazer Ayna"), shape: "mirror", world: "Moon", L: .46, H: .5, kg: 30, color: "#06d6a0",
+    { id: "mirror", name: T("Laser Mirror", "Lazer Ayna"), shape: "mirror", world: "Moon", L: .46, H: .5, kg: 30, color: "#06d6a0", body: "#c8d0da",
       dims: T("panel 46 × 46 cm, 100 tiny mirrors", "panel 46 × 46 cm, 100 küçük ayna"), like: T("about the size of a school desk top", "bir okul sırasının üstü kadar") },
-    { id: "pioneer", name: "Pioneer 10 & 11", shape: "pioneer", world: "Space", L: 2.74, H: 2.9, kg: 258, color: "#8ecae6",
+    { id: "pioneer", name: "Pioneer 10 & 11", shape: "pioneer", world: "Space", L: 2.74, H: 2.9, kg: 258, color: "#8ecae6", body: "#d8b45a",
       dims: T("2.9 m tall · dish 2.74 m wide", "2,9 m yüksek · çanak anten 2,74 m geniş"), like: T("its dish is as wide as a trampoline", "çanak anteni bir trambolin kadar geniş") },
-    { id: "dawn", name: "Dawn", shape: "dawn", world: "Space", L: 19.7, H: 1.8, kg: 1218, color: "#4cc9f0",
+    { id: "dawn", name: "Dawn", shape: "dawn", world: "Space", L: 19.7, H: 1.8, kg: 1218, color: "#4cc9f0", body: "#d8b45a",
       dims: T("19.7 m from wingtip to wingtip", "kanat ucundan kanat ucuna 19,7 m"), like: T("longer than a school bus!", "bir okul otobüsünden bile uzun!") }
   ];
   const POSES = [
@@ -4081,17 +4118,17 @@ const MAP_SITES = [
     { id: "jump", label: T("🙌 Jump", "🙌 Zıpla") }, { id: "point", label: T("👉 Point", "👉 Göster") },
     { id: "flex", label: T("💪 Strong", "💪 Güçlü") }, { id: "astro", label: T("🧑‍🚀 Astronaut", "🧑‍🚀 Astronot") }
   ];
-  const WORLD = { Mars: { g: "#a9482a", g2: "#7d311c", sky: "#1a0c09", lbl: T("on Mars", "Mars'ta") },
-                  Moon: { g: "#8d8f98", g2: "#6c6e77", sky: "#0d1020", lbl: T("on the Moon", "Ay'da") },
-                  Space: { g: "#2a3150", g2: "#1c2240", sky: "#070a18", lbl: T("in space", "uzayda") } };
+  const WORLD = { Mars: { g: "#c1623a", g2: "#8a3b20", hill: "#6e2c19", sky: "#120706", sky2: "#5a2617", lbl: T("on Mars", "Mars'ta") },
+                  Moon: { g: "#a3a6b0", g2: "#6f727c", hill: "#555864", sky: "#03050c", sky2: "#151b33", lbl: T("on the Moon", "Ay'da") },
+                  Space: { g: "#39406a", g2: "#232848", hill: "#1d2140", sky: "#05061a", sky2: "#2b1f5c", lbl: T("in space", "uzayda") } };
   const fmtM = m => (m < 1 ? Math.round(m * 100) + " cm" : (TRx ? m.toFixed(2).replace(/\.?0+$/, "").replace(".", ",") : m.toFixed(2).replace(/\.?0+$/, "")) + " m");
   const fmtKg = kg => (TRx ? kg.toLocaleString("tr-TR") : kg.toLocaleString("en-US")) + " kg";
 
   /* ---------- çizimler (metre biriminde; zemin y=0, yukarısı negatif) ---------- */
   const S = 'vector-effect="non-scaling-stroke" stroke="#0b1026" stroke-width="2.5" stroke-linejoin="round"';
   function shapeSVG(it) {
-    const L = it.L, H = it.H, c = it.color;
-    const wheel = (x, r) => `<circle cx="${x}" cy="${-r}" r="${r}" fill="#2b2f45" ${S}/><circle cx="${x}" cy="${-r}" r="${r * .35}" fill="${c}"/>`;
+    const L = it.L, H = it.H, c = it.body || it.color, hub = "#c9ced9";
+    const wheel = (x, r) => `<circle cx="${x}" cy="${-r}" r="${r}" fill="#2b2f45" ${S}/><circle cx="${x}" cy="${-r}" r="${r * .35}" fill="${hub}"/>`;
     switch (it.shape) {
       case "rover": { const r = H * .13, deckY = -H * .55;
         return `<path d="M${L * .2} ${-r} L${L * .35} ${deckY + H * .12} L${L * .65} ${deckY + H * .12} L${L * .8} ${-r}" fill="none" ${S}/>
@@ -4137,38 +4174,68 @@ const MAP_SITES = [
           <polygon points="${L * .38},${-H * .7} ${L * .62},${-H * .7} ${L * .66},${-H * .55} ${L * .34},${-H * .55}" fill="${c}" ${S}/>
           <path d="M${L * .38} ${-H * .6} L${L * .02} ${-H * .25} M${L * .62} ${-H * .6} L${L * .98} ${-H * .3}" ${S} fill="none"/>
           <rect x="${L * .48}" y="${-H * .55}" width=".04" height="${H * .55}" fill="#cfd4e6" ${S}/>`;
+      case "cat": return `<ellipse cx=".22" cy="-.17" rx=".22" ry=".1" fill="#f4a261" ${S}/><circle cx=".42" cy="-.27" r=".07" fill="#f4a261" ${S}/>
+          <path d="M.37 -.33 l.02 -.06 l.03 .05 M.44 -.34 l.03 -.06 l.02 .06" fill="#f4a261" ${S}/><path d="M.02 -.18 q-.12 -.08 -.06 -.22" fill="none" ${S}/><path d="M.08 -.1 v.1 M.34 -.1 v.1" ${S}/>`;
+      case "bus": return `<rect x="0" y="-3.1" width="12" height="2.6" rx=".3" fill="#ffc300" ${S}/>
+          ${[1, 2.6, 4.2, 5.8, 7.4, 9].map(x => `<rect x="${x}" y="-2.8" width="1.2" height=".9" fill="#bde0fe" ${S}/>`).join("")}
+          <circle cx="2.2" cy="-.5" r=".5" fill="#2b2f45" ${S}/><circle cx="9.6" cy="-.5" r=".5" fill="#2b2f45" ${S}/>`;
       case "dawn": return `<rect x="0" y="${-H * .62}" width="${L * .44}" height="${H * .24}" fill="#2541b2" ${S}/>
           <rect x="${L * .56}" y="${-H * .62}" width="${L * .44}" height="${H * .24}" fill="#2541b2" ${S}/>
           <rect x="${L * .455}" y="${-H}" width="${L * .09}" height="${H}" rx="${L * .01}" fill="${c}" ${S}/>`;
     }
     return "";
   }
-  /* insan figürü — boy (m) ve poza göre; ayakları x noktasında yerde */
-  function personSVG(h, pose, color, name) {
-    const u = h / 8, hr = u * .55, sw = Math.max(.012, h * .055), skin = "#f1c27d", col = color;
-    const hip = [0, -u * 4], neck = [0, -u * 6.5], head = [0, -u * 7.25];
+  /* insan figürü — boy (m), poz ve görünüme göre; ayakları x noktasında yerde
+     look = { gender: "girl" | "boy", skin, hair, outfit } */
+  function personSVG(h, pose, look, name) {
+    const u = h / 8, hr = u * .55, sw = Math.max(.012, h * .055), skin = look.skin, col = look.outfit, hairC = look.hair, girl = look.gender === "girl";
+    const neck = [0, -u * 6.5], head = [0, -u * 7.25], hy = head[1];
+    const NS = 'stroke="#0b1026" stroke-width="2" vector-effect="non-scaling-stroke"';
     const lim = (a, b, w, cl) => `<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="${cl}" stroke-width="${w}" stroke-linecap="round"/>`;
-    let lA = [[-u * .9, -u * 5], [-u * 1.1, -u * 3.8]], rA = [[u * .9, -u * 5], [u * 1.1, -u * 3.8]], lL = [[-u * .5, -u * 2], [-u * .6, 0]], rL = [[u * .5, -u * 2], [u * .6, 0]], lift = 0;
-    if (pose === "wave") rA = [[u * 1.1, -u * 6.6], [u * 1.6, -u * 8]];
-    if (pose === "jump") { lA = [[-u * 1.2, -u * 7], [-u * 1.6, -u * 8.3]]; rA = [[u * 1.2, -u * 7], [u * 1.6, -u * 8.3]]; lL = [[-u * .9, -u * 2.3], [-u * 1.2, -u * .4]]; rL = [[u * .9, -u * 2.3], [u * 1.2, -u * .4]]; lift = u * .9; }
-    if (pose === "point") rA = [[u * 1.5, -u * 5.9], [u * 2.6, -u * 6.1]];
-    if (pose === "flex") { lA = [[-u * 1.4, -u * 5.8], [-u * 1.2, -u * 7]]; rA = [[u * 1.4, -u * 5.8], [u * 1.2, -u * 7]]; }
-    const astro = pose === "astro", suit = astro ? "#f1f3f8" : col;
-    const shoulder = [0, -u * 6.1];
-    const arm = (p) => lim(shoulder, p[0], sw, suit) + lim(p[0], p[1], sw, suit) + `<circle cx="${p[1][0]}" cy="${p[1][1]}" r="${sw * .7}" fill="${astro ? "#c9ced9" : skin}"/>`;
-    const leg = (p) => lim(hip, p[0], sw * 1.15, astro ? "#f1f3f8" : "#2f3e66") + lim(p[0], p[1], sw * 1.15, astro ? "#f1f3f8" : "#2f3e66") + `<ellipse cx="${p[1][0]}" cy="${p[1][1]}" rx="${sw}" ry="${sw * .5}" fill="#222"/>`;
+    /* omuzlar ve kalçalar gövdenin iki yanında; kollar/bacaklar buradan başlar (orantılı duruş) */
+    const Ls = [-u * .82, -u * 6.0], Rs = [u * .82, -u * 6.0], Lh = [-u * .32, -u * 3.9], Rh = [u * .32, -u * 3.9];
+    let lA = [[-u * 1.05, -u * 4.9], [-u * 1.1, -u * 3.85]], rA = [[u * 1.05, -u * 4.9], [u * 1.1, -u * 3.85]],
+        lL = [[-u * .42, -u * 2], [-u * .45, 0]], rL = [[u * .42, -u * 2], [u * .45, 0]], lift = 0;
+    if (pose === "wave") rA = [[u * 1.55, -u * 6.75], [u * 1.75, -u * 7.95]];
+    if (pose === "jump") { lA = [[-u * 1.4, -u * 7.0], [-u * 1.7, -u * 8.2]]; rA = [[u * 1.4, -u * 7.0], [u * 1.7, -u * 8.2]];
+      lL = [[-u * .9, -u * 2.3], [-u * 1.15, -u * .4]]; rL = [[u * .9, -u * 2.3], [u * 1.15, -u * .4]]; lift = u * .9; }
+    if (pose === "point") rA = [[u * 1.75, -u * 5.85], [u * 2.65, -u * 5.95]];
+    if (pose === "flex") { lA = [[-u * 1.75, -u * 5.75], [-u * 1.55, -u * 6.95]]; rA = [[u * 1.75, -u * 5.75], [u * 1.55, -u * 6.95]]; }
+    const astro = pose === "astro", suit = astro ? "#f1f3f8" : col, pants = astro ? "#f1f3f8" : (girl ? "#3d3270" : "#2f3e66");
+    const arm = (sh, p) => lim(sh, p[0], sw, suit) + lim(p[0], p[1], sw, suit) + `<circle cx="${p[1][0]}" cy="${p[1][1]}" r="${sw * .7}" fill="${astro ? "#c9ced9" : skin}"/>`;
+    const leg = (hp, p) => lim(hp, p[0], sw * 1.15, pants) + lim(p[0], p[1], sw * 1.15, pants) + `<ellipse cx="${p[1][0] + sw * .2}" cy="${p[1][1]}" rx="${sw * 1.05}" ry="${sw * .5}" fill="${astro ? "#9aa0b4" : "#222"}"/>`;
+    /* saç: kız -> omuzlara uzanan uzun saç + toka, erkek -> kısa saç + perçem */
+    const backHair = girl && !astro ? `<path d="M${-hr * 1.12} ${hy} Q${-hr * 1.25} ${hy + hr * 2.1} ${-hr * .9} ${hy + hr * 2.5} L${hr * .9} ${hy + hr * 2.5} Q${hr * 1.25} ${hy + hr * 2.1} ${hr * 1.12} ${hy} Z" fill="${hairC}" ${NS}/>` : "";
+    const frontHair = astro ? "" : girl
+      ? `<path d="M${-hr * .92} ${hy + hr * .6} A${hr * 1.1} ${hr * 1.1} 0 1 1 ${hr * .92} ${hy + hr * .6} L${hr * .9} ${hy + hr * .6} Q${hr * .88} ${hy - hr * .3} ${hr * .2} ${hy - hr * .28} Q${-hr * .4} ${hy - hr * .12} ${-hr * .72} ${hy + hr * .05} Q${-hr * .88} ${hy + hr * .3} ${-hr * .9} ${hy + hr * .6} Z" fill="${hairC}" ${NS}/>
+         <path d="M${hr * .55} ${hy - hr * .78} l${hr * .32} ${-hr * .2} l0 ${hr * .45} z M${hr * .55} ${hy - hr * .78} l${-hr * .3} ${-hr * .22} l0 ${hr * .45} z" fill="${col}" ${NS}/>`
+      : `<path d="M${-hr * 1.03} ${hy + hr * .15} A${hr * 1.04} ${hr * 1.04} 0 1 1 ${hr * 1.03} ${hy + hr * .15} Q${hr * .95} ${hy - hr * .32} ${hr * .5} ${hy - hr * .32} Q${hr * .12} ${hy - hr * .58} ${-hr * .28} ${hy - hr * .32} Q${-hr * .8} ${hy - hr * .32} ${-hr * 1.03} ${hy + hr * .15} Z" fill="${hairC}" ${NS}/>`;
+    const face = astro
+      ? `<circle cx="0" cy="${hy}" r="${hr * .95}" fill="#1d2b6b"/><path d="M${-hr * .5} ${hy - hr * .3} q${hr * .3} ${-hr * .3} ${hr * .6} 0" stroke="#8ecae6" stroke-width="2" fill="none" vector-effect="non-scaling-stroke"/>`
+      : `<circle cx="${-hr * .36}" cy="${hy + hr * .05}" r="${hr * .12}" fill="#0b1026"/><circle cx="${hr * .36}" cy="${hy + hr * .05}" r="${hr * .12}" fill="#0b1026"/>
+         <circle cx="${-hr * .55}" cy="${hy + hr * .38}" r="${hr * .14}" fill="#ff8fab" opacity=".55"/><circle cx="${hr * .55}" cy="${hy + hr * .38}" r="${hr * .14}" fill="#ff8fab" opacity=".55"/>
+         <path d="M${-hr * .3} ${hy + hr * .42} q${hr * .3} ${hr * .28} ${hr * .6} 0" stroke="#0b1026" stroke-width="2" fill="none" stroke-linecap="round" vector-effect="non-scaling-stroke"/>`;
     return `<g transform="translate(0 ${-lift})">
-      ${leg(lL)}${leg(rL)}
-      <path d="M${-u * .95} ${neck[1] + u * .3} Q0 ${neck[1] - u * .1} ${u * .95} ${neck[1] + u * .3} L${u * .75} ${hip[1] + u * .2} L${-u * .75} ${hip[1] + u * .2} Z" fill="${suit}" stroke="#0b1026" stroke-width="2" vector-effect="non-scaling-stroke"/>
-      ${astro ? `<rect x="${-u * .55}" y="${-u * 5.9}" width="${u * 1.1}" height="${u * .9}" rx="${u * .1}" fill="#9aa0b4"/>` : ""}
-      ${arm(lA)}${arm(rA)}
-      <circle cx="0" cy="${head[1]}" r="${hr * (astro ? 1.35 : 1)}" fill="${astro ? "#f1f3f8" : skin}" stroke="#0b1026" stroke-width="2" vector-effect="non-scaling-stroke"/>
-      ${astro ? `<circle cx="0" cy="${head[1]}" r="${hr * .95}" fill="#1d2b6b"/><path d="M${-hr * .5} ${head[1] - hr * .3} q${hr * .3} ${-hr * .3} ${hr * .6} 0" stroke="#8ecae6" stroke-width="2" fill="none" vector-effect="non-scaling-stroke"/>`
-              : `<circle cx="${-hr * .35}" cy="${head[1] - hr * .1}" r="${hr * .12}" fill="#0b1026"/><circle cx="${hr * .35}" cy="${head[1] - hr * .1}" r="${hr * .12}" fill="#0b1026"/>
-                 <path d="M${-hr * .35} ${head[1] + hr * .3} q${hr * .35} ${hr * .3} ${hr * .7} 0" stroke="#0b1026" stroke-width="2" fill="none" vector-effect="non-scaling-stroke"/>
-                 <path d="M${-hr} ${head[1] - hr * .2} q${hr} ${-hr * 1.3} ${hr * 2} 0" fill="#5a3825"/>`}
-      <text x="0" y="${head[1] - hr * 1.7}" text-anchor="middle" font-size="${Math.max(.09, h * .085)}" font-weight="700" fill="#fff" stroke="#0b1026" stroke-width="3" paint-order="stroke" vector-effect="non-scaling-stroke">${name}</text>
+      ${backHair}${leg(Lh, lL)}${leg(Rh, rL)}
+      <rect x="${-u * .18}" y="${neck[1] - u * .15}" width="${u * .36}" height="${u * .45}" fill="${astro ? "#c9ced9" : skin}"/>
+      <path d="M${-u * .82} ${-u * 6.05} Q0 ${-u * 6.35} ${u * .82} ${-u * 6.05} L${u * .68} ${-u * 3.75} L${-u * .68} ${-u * 3.75} Z" fill="${suit}" ${NS}/>
+      ${astro ? `<rect x="${-u * .55}" y="${-u * 5.9}" width="${u * 1.1}" height="${u * .9}" rx="${u * .1}" fill="#9aa0b4"/><rect x="${-u * .35}" y="${-u * 5.7}" width="${u * .25}" height="${u * .2}" fill="#ef476f"/>`
+              : `<path d="M${-u * .68} ${-u * 3.95} h${u * 1.36}" stroke="rgba(0,0,0,.25)" stroke-width="3" vector-effect="non-scaling-stroke"/><circle cx="0" cy="${-u * 5.3}" r="${u * .22}" fill="rgba(255,255,255,.55)"/>`}
+      ${arm(Ls, lA)}${arm(Rs, rA)}
+      <circle cx="0" cy="${hy}" r="${hr * (astro ? 1.35 : 1)}" fill="${astro ? "#f1f3f8" : skin}" ${NS}/>
+      ${face}${frontHair}
+      <text x="0" y="${hy - hr * 1.8}" text-anchor="middle" font-size="${Math.max(.09, h * .085)}" font-weight="700" fill="#fff" stroke="#0b1026" stroke-width="3" paint-order="stroke" vector-effect="non-scaling-stroke">${name}</text>
     </g>`;
+  }
+
+  /* sürükleme göstergesi: iki yanda yanıp sönen oklar + ilk seferde "Beni sürükle!" balonu */
+  function dragHint(ph, top) {
+    const a = ph * .13, y = -ph * .5, gx = ph * .42, fs = Math.max(.08, ph * .085);
+    const arrow = d => `<path d="M${d * gx} ${y - a} L${d * (gx + a * 1.1)} ${y} L${d * gx} ${y + a} Z" fill="#ffd166" stroke="#0b1026" stroke-width="2" vector-effect="non-scaling-stroke"/>`;
+    const bubble = st.dragged ? "" : `<g class="sz-bubble"><rect x="${-ph * .62}" y="${-ph * 1.62}" width="${ph * 1.24}" height="${ph * .2}" rx="${ph * .08}" fill="#ffd166" stroke="#0b1026" stroke-width="2" vector-effect="non-scaling-stroke"/>
+        <path d="M${-ph * .06} ${-ph * 1.42} L0 ${-ph * 1.34} L${ph * .06} ${-ph * 1.42} Z" fill="#ffd166"/>
+        <text x="0" y="${-ph * 1.485}" text-anchor="middle" font-size="${fs * 1.05}" font-weight="700" fill="#0b1026">${T("👆 Drag me!", "👆 Beni sürükle!")}</text></g>`;
+    return `<g class="sz-drag${st.dragged ? " done" : ""}"><g class="sz-arr sz-l">${arrow(-1)}</g><g class="sz-arr sz-r">${arrow(1)}</g>${bubble}</g>`;
   }
 
   /* ---------- arayüz ---------- */
@@ -4181,34 +4248,115 @@ const MAP_SITES = [
       <span class="sc-dims">📏 ${it.dims}</span><span class="sc-kg">⚖️ ${fmtKg(it.kg)}${it.kg >= 600 && it.id !== "lm" ? " ≈" : ""}</span>
       <span class="sc-like">${T("≈ ", "≈ ")}${it.like}</span></button>`).join("");
 
+  /* ---------- 🏁 HEPSİ BİR ARADA: tüm araçlar + kedi + otobüs, küçükten büyüğe, eşit aralıklarla ---------- */
+  const EXTRA = [
+    { id: "cat", name: T("Cat", "Kedi"), shape: "cat", world: "Earth", L: .46, H: .35, color: "#f4a261" },
+    { id: "bus", name: T("School bus", "Okul otobüsü"), shape: "bus", world: "Earth", L: 12, H: 3.1, color: "#ffc300" }];
+  const ALL_SEQ = SIZE_ITEMS.concat(EXTRA).slice().sort((a, b) => Math.max(a.L, a.H) - Math.max(b.L, b.H));
+  const ALL = { id: "all", name: T("All together", "Hepsi bir arada"), world: "Space" };
+  const GAP = 2; /* her kahraman arasında 2 m boşluk */
+  const GROUPS = [
+    { lbl: T("🐈 Small (under 1 m)", "🐈 Küçükler (1 m altı)"), test: m => m < 1 },
+    { lbl: T("🚙 Medium (1–4 m)", "🚙 Ortalar (1–4 m)"), test: m => m >= 1 && m < 4 },
+    { lbl: T("🏠 Giants (4 m+)", "🏠 Devler (4 m üstü)"), test: m => m >= 4 }];
+  const maxBar = Math.sqrt(Math.max(...ALL_SEQ.map(it => Math.max(it.L, it.H))));
+  list.insertAdjacentHTML("beforebegin", `<button type="button" class="sz-allcard" id="szAllCard">
+      <span class="sa-txt"><b>🏁 ${T("All Together", "Hepsi Bir Arada")}</b>
+        <span>${T(`All ${ALL_SEQ.length} side by side, from smallest to biggest — the cat and the school bus too! Scroll along and find your place in the line.`,
+                  `${ALL_SEQ.length} kahraman yan yana, küçükten büyüğe — kedi ve okul otobüsü de sırada! Kaydırarak gez, sıradaki yerini bul.`)}</span>
+        <i>${T("👉 Tap to see the line-up", "👉 Sırayı görmek için dokun")}</i></span>
+      <span class="sa-bars" aria-hidden="true">${ALL_SEQ.map(it => `<span style="height:${Math.max(8, Math.sqrt(Math.max(it.L, it.H)) / maxBar * 100)}%;background:${it.color}" title="${it.name}"></span>`).join("")}</span>
+    </button>`);
+  const allCard = document.getElementById("szAllCard");
+
+  const LOOKS = { skin: ["#ffdbb4", "#f1c27d", "#c68642", "#8d5524"], hair: ["#1b1b1b", "#5a3825", "#c68b2f", "#b5452a"],
+                  outfit: ["#4cc9f0", "#06d6a0", "#c77dff", "#ff6b6b", "#ffd166", "#3a86ff"] };
   const ctl = document.getElementById("sizeCtl");
   ctl.innerHTML = `
     <div class="sz-row"><label>${T("Your name", "Adın")}<input type="text" id="szName" maxlength="16" value="${T("Me", "Ben")}"></label>
     <label>${T("Your height (cm)", "Boyun (cm)")}<input type="number" id="szH" min="60" max="230" step="1" value="140"></label></div>
+    <div class="sz-lbl">${T("I am a", "Ben bir")}</div><div class="chips" id="szGender">
+      <button type="button" class="chip on" data-g="girl">👧 ${T("Girl", "Kız")}</button><button type="button" class="chip" data-g="boy">👦 ${T("Boy", "Erkek")}</button></div>
+    <div class="sz-lbl">${T("Skin", "Ten rengi")}</div><div class="chips" id="szSkin">${LOOKS.skin.map((c, i) => `<button type="button" class="swatch${i === 1 ? " on" : ""}" data-v="${c}" style="background:${c}" aria-label="${c}"></button>`).join("")}</div>
+    <div class="sz-lbl">${T("Hair", "Saç rengi")}</div><div class="chips" id="szHair">${LOOKS.hair.map((c, i) => `<button type="button" class="swatch${i === 1 ? " on" : ""}" data-v="${c}" style="background:${c}" aria-label="${c}"></button>`).join("")}</div>
+    <div class="sz-lbl">${T("Outfit", "Kıyafet rengi")}</div><div class="chips" id="szOutfit">${LOOKS.outfit.map((c, i) => `<button type="button" class="swatch${i === 0 ? " on" : ""}" data-v="${c}" style="background:${c}" aria-label="${c}"></button>`).join("")}</div>
     <div class="sz-lbl">${T("Pose", "Poz")}</div><div class="chips" id="szPoses">${POSES.map((p, i) => `<button type="button" class="chip${i === 0 ? " on" : ""}" data-p="${p.id}">${p.label}</button>`).join("")}</div>
     <div class="sz-lbl">${T("Also show", "Bunları da göster")}</div><div class="chips" id="szRefs">
       <button type="button" class="chip" data-r="cat">🐈 ${T("Cat", "Kedi")}</button><button type="button" class="chip" data-r="bus">🚌 ${T("School bus", "Okul otobüsü")}</button></div>`;
 
   const stage = document.getElementById("sizeStage");
-  const st = { item: SIZE_ITEMS[2], pose: "stand", px: null, refs: new Set() };
+  const st = { item: SIZE_ITEMS[2], pose: "stand", px: null, refs: new Set(),
+    look: { gender: "girl", skin: LOOKS.skin[1], hair: LOOKS.hair[1], outfit: LOOKS.outfit[0] } };
   const personH = () => Math.min(2.3, Math.max(.6, (parseFloat(document.getElementById("szH").value) || 140) / 100));
   const pname = () => (document.getElementById("szName").value.trim() || T("Me", "Ben")).replace(/[<>&"]/g, "");
 
+  const isPano = () => st.item.id === "all";
+  function panoLayout() {
+    const ph = personH(); let x = 0;
+    const pos = ALL_SEQ.map(it => { const p = x; x += it.L + GAP; return p; });
+    const x0 = -2, x1 = x + 1, top = Math.max(7, ph * 1.3) * 1.25, gh = 1;
+    const small = innerWidth < 700 || document.documentElement.dataset.view === "mobile";
+    const pxm = (small ? 320 : 470) / (top + gh);
+    return { x0, x1, top, ph, pos, gh, pxm };
+  }
   function layout() {
+    if (isPano()) return panoLayout();
     const it = st.item, ph = personH();
     const refW = (st.refs.has("cat") ? .9 : 0) + (st.refs.has("bus") ? 13.5 : 0);
     const x0 = -Math.max(1.2, it.L * .12), x1 = it.L + Math.max(2, it.L * .35) + refW;
-    const top = Math.max(it.H, ph * 1.12, st.refs.has("bus") ? 3.2 : 0) * 1.32;
+    const top = Math.max(it.H, ph * 1.3, st.refs.has("bus") ? 3.2 : 0) * 1.32;
     return { x0, x1, top, ph };
   }
   function scaleTicks(span) { const steps = [.1, .25, .5, 1, 2, 5, 10]; return steps.find(s => span / s <= 14) || 10; }
 
+  function renderAll() {
+    const { x0, x1, top, ph, pos, gh, pxm } = panoLayout(), w = x1 - x0, keep = stage.classList.contains("pano") ? stage.scrollLeft : null;
+    if (st.px === null || st.px < x0 || st.px > x1) st.px = pos[3] - GAP / 2;
+    const W = WORLD.Space, fs = Math.max(.3, 12.5 / pxm);
+    let ticks = ""; for (let x = 0; x <= x1; x += 1)
+      ticks += `<line x1="${x}" y1="0" x2="${x}" y2="${gh * (x % 5 ? .18 : .32)}" stroke="#fff" stroke-width="1.5" vector-effect="non-scaling-stroke" opacity=".75"/>` +
+        (x % 2 ? "" : `<text x="${x}" y="${gh * .75}" font-size="${Math.max(gh * .34, 11 / pxm)}" text-anchor="middle" fill="#fff" opacity=".85">${x} m</text>`);
+    const items = ALL_SEQ.map((it, i) => { const x = pos[i], cx = x + it.L / 2, ly = -it.H - fs * .6 - (i % 2) * fs * 2.3;
+      return `<g transform="translate(${x} 0)">${shapeSVG(it)}</g>
+        <line x1="${cx}" y1="${-it.H - fs * .35}" x2="${cx}" y2="${ly + fs * .35}" stroke="${it.color}" stroke-width="1.5" stroke-dasharray="3 3" vector-effect="non-scaling-stroke" opacity=".8"/>
+        <text x="${cx}" y="${ly - fs * 1.05}" text-anchor="middle" font-size="${fs}" font-weight="700" fill="${it.color}" stroke="#05061a" stroke-width="3" paint-order="stroke" vector-effect="non-scaling-stroke">${i + 1}. ${it.name}</text>
+        <text x="${cx}" y="${ly}" text-anchor="middle" font-size="${fs * .85}" fill="#fff" stroke="#05061a" stroke-width="3" paint-order="stroke" vector-effect="non-scaling-stroke">↔ ${fmtM(it.L)} · ↕ ${fmtM(it.H)}</text>`; }).join("");
+    stage.classList.add("pano");
+    stage.innerHTML = `<svg id="szSvg" viewBox="${x0} ${-top} ${w} ${top + gh}" style="width:${Math.round(w * pxm)}px;height:${Math.round((top + gh) * pxm)}px;max-width:none;max-height:none" xmlns="http://www.w3.org/2000/svg" font-family="Fredoka, sans-serif">
+      <defs><linearGradient id="szSky" x1="0" y1="${-top}" x2="0" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="${W.sky}"/><stop offset="1" stop-color="${W.sky2}"/></linearGradient>
+        <linearGradient id="szGround" x1="0" y1="0" x2="0" y2="${gh}" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="${W.g}"/><stop offset="1" stop-color="${W.g2}"/></linearGradient></defs>
+      <rect x="${x0}" y="${-top}" width="${w}" height="${top}" fill="url(#szSky)"/>
+      ${Array.from({ length: Math.round(w * 2.5) }, (_, i) => `<circle cx="${x0 + ((i * 37.7) % w)}" cy="${-top + ((i * 61) % 100) / 100 * top * .75}" r="${.03 + (i % 3) * .015}" fill="#fff" opacity=".7"/>`).join("")}
+      <rect x="${x0}" y="0" width="${w}" height="${gh}" fill="url(#szGround)"/>
+      ${ticks}${items}
+      <g id="szPerson" transform="translate(${st.px} 0)" style="cursor:grab" tabindex="0" role="slider" aria-label="${T("Drag to move", "Sürükleyerek taşı")}">${personSVG(ph, st.pose, st.look, pname())}
+        ${dragHint(ph, top)}
+        <rect x="${-ph * .3}" y="${-ph * 1.15}" width="${ph * .6}" height="${ph * 1.15}" fill="transparent"/></g>
+    </svg>`;
+    if (keep !== null) stage.scrollLeft = keep; else showX(st.px, "auto");
+    document.getElementById("szInfo").innerHTML = allText(ph);
+    bindDrag();
+  }
+  /* sahnede x (metre) noktasını ortaya getir */
+  function showX(x, behavior) { if (!isPano()) return; const { x0, pxm } = panoLayout();
+    stage.scrollTo({ left: (x - x0) * pxm - stage.clientWidth / 2, behavior: behavior || "smooth" }); }
+  function allText(ph) {
+    const shorter = ALL_SEQ.filter(it => it.H < ph * .95), taller = ALL_SEQ.filter(it => it.H > ph * 1.05);
+    const big = ALL_SEQ[ALL_SEQ.length - 1], tiny = ALL_SEQ[0], r = Math.max(big.L, big.H) / Math.max(tiny.L, tiny.H);
+    const names = a => a.length ? a.map(x => x.name).join(", ") : "—";
+    return `<p>🏁 ${T(`<b>${ALL_SEQ.length}</b> heroes lined up from smallest to biggest, with <b>${GAP} m</b> between each one.`, `<b>${ALL_SEQ.length}</b> kahraman küçükten büyüğe dizildi; her birinin arası <b>${GAP} m</b>.`)}</p>
+      <p>⬇️ ${T(`Shorter than ${pname()}:`, `${pname()} adlı kâşiften kısa:`)} ${names(shorter)}</p>
+      <p>⬆️ ${T(`Taller than ${pname()}:`, `${pname()} adlı kâşiften uzun:`)} ${names(taller)}</p>
+      <p>🤯 ${T(`${big.name} is about <b>${Math.round(r)}×</b> longer than the ${tiny.name.toLowerCase()}!`, `${big.name}, ${tiny.name.toLocaleLowerCase("tr")}den yaklaşık <b>${Math.round(r)} kat</b> daha uzun!`)}</p>`;
+  }
   function render() {
+    if (isPano()) return renderAll();
+    stage.classList.remove("pano"); stage.scrollLeft = 0;
     const it = st.item, W = WORLD[it.world], { x0, x1, top, ph } = layout();
     if (st.px === null || st.px < x0 || st.px > x1) st.px = it.L + Math.max(.6, ph * .45);
     const w = x1 - x0, gh = top * .1, tick = scaleTicks(w);
     let ticks = ""; for (let x = Math.ceil(x0 / tick) * tick; x <= x1; x += tick)
-      ticks += `<line x1="${x}" y1="0" x2="${x}" y2="${gh * .35}" stroke="#fff" stroke-width="1.5" vector-effect="non-scaling-stroke" opacity=".8"/>
+      ticks += `<line x1="${x}" y1="0" x2="${x}" y2="${gh * .3}" stroke="#fff" stroke-width="1.5" vector-effect="non-scaling-stroke" opacity=".8"/>
         <text x="${x}" y="${gh * .85}" font-size="${gh * .38}" text-anchor="middle" fill="#fff" opacity=".85">${fmtM(Math.round(x * 100) / 100).replace(" ", " ")}</text>`;
     let refs = "", rx = it.L + Math.max(2, it.L * .35);
     if (st.refs.has("cat")) { refs += `<g transform="translate(${rx} 0)"><ellipse cx=".22" cy="-.17" rx=".22" ry=".1" fill="#f4a261" ${S}/><circle cx=".42" cy="-.27" r=".07" fill="#f4a261" ${S}/>
@@ -4220,9 +4368,17 @@ const MAP_SITES = [
         <text x="6" y="-3.3" font-size="${gh * .4}" text-anchor="middle" fill="#fff">${T("school bus · 12 m", "okul otobüsü · 12 m")}</text></g>`; }
     const dimY = -it.H - top * .05;
     stage.innerHTML = `<svg id="szSvg" viewBox="${x0} ${-top} ${w} ${top + gh}" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg" font-family="Fredoka, sans-serif">
-      <rect x="${x0}" y="${-top}" width="${w}" height="${top}" fill="${W.sky}"/>
+      <defs><linearGradient id="szSky" x1="0" y1="${-top}" x2="0" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="${W.sky}"/><stop offset="1" stop-color="${W.sky2}"/></linearGradient>
+        <linearGradient id="szGround" x1="0" y1="0" x2="0" y2="${gh}" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="${W.g}"/><stop offset="1" stop-color="${W.g2}"/></linearGradient></defs>
+      <rect x="${x0}" y="${-top}" width="${w}" height="${top}" fill="url(#szSky)"/>
       ${Array.from({ length: 40 }, (_, i) => `<circle cx="${x0 + ((i * 37) % 100) / 100 * w}" cy="${-top + ((i * 61) % 100) / 100 * top * .7}" r="${top * .004}" fill="#fff" opacity=".7"/>`).join("")}
-      <rect x="${x0}" y="0" width="${w}" height="${gh}" fill="${W.g}"/>
+      ${it.world === "Moon" ? `<circle cx="${x0 + w * .86}" cy="${-top * .78}" r="${top * .07}" fill="#4cc9f0"/><path d="M${x0 + w * .845} ${-top * .8} q${top * .03} ${-top * .03} ${top * .06} ${top * .01}" stroke="#06d6a0" stroke-width="3" fill="none" vector-effect="non-scaling-stroke"/>`
+        : it.world === "Mars" ? `<circle cx="${x0 + w * .86}" cy="${-top * .75}" r="${top * .035}" fill="#ffe8c2" opacity=".85"/>`
+        : `<circle cx="${x0 + w * .85}" cy="${-top * .72}" r="${top * .09}" fill="#c77dff" opacity=".35"/><circle cx="${x0 + w * .85}" cy="${-top * .72}" r="${top * .05}" fill="#ffd166"/>`}
+      <path d="M${x0} 0 ${Array.from({ length: 9 }, (_, i) => `Q${x0 + w * (i + .5) / 9} ${-top * (.06 + .05 * ((i * 7) % 3))} ${x0 + w * (i + 1) / 9} 0`).join(" ")} Z" fill="${W.hill}" opacity=".9"/>
+      <rect x="${x0}" y="0" width="${w}" height="${gh}" fill="url(#szGround)"/>
+      ${Array.from({ length: 7 }, (_, i) => { const rx = x0 + w * ((i * 0.137 + .06) % 1), rr = gh * (.12 + (i % 3) * .06);
+        return it.world === "Moon" ? `<ellipse cx="${rx}" cy="${gh * .55}" rx="${rr * 2}" ry="${rr * .55}" fill="${W.g2}" opacity=".8"/>` : `<ellipse cx="${rx}" cy="${gh * .5}" rx="${rr * 1.3}" ry="${rr * .7}" fill="${W.g2}"/>`; }).join("")}
       ${ticks}
       <g>${shapeSVG(it)}</g>
       <path d="M0 ${dimY} H${it.L} M0 ${dimY - top * .015} v${top * .03} M${it.L} ${dimY - top * .015} v${top * .03}" stroke="${it.color}" stroke-width="2" vector-effect="non-scaling-stroke"/>
@@ -4230,7 +4386,8 @@ const MAP_SITES = [
       <line x1="${x0 * .45}" y1="0" x2="${x0 * .45}" y2="${-it.H}" stroke="${it.color}" stroke-width="2" stroke-dasharray="4 3" vector-effect="non-scaling-stroke"/>
       <text x="${x0 * .45}" y="${-it.H - top * .015}" text-anchor="middle" font-size="${top * .035}" fill="${it.color}">${fmtM(it.H)}</text>
       ${refs}
-      <g id="szPerson" transform="translate(${st.px} 0)" style="cursor:grab">${personSVG(ph, st.pose, "#f08a4b", pname())}
+      <g id="szPerson" transform="translate(${st.px} 0)" style="cursor:grab" tabindex="0" role="slider" aria-label="${T("Drag to move", "Sürükleyerek taşı")}">${personSVG(ph, st.pose, st.look, pname())}
+        ${dragHint(ph, top)}
         <rect x="${-ph * .3}" y="${-ph * 1.15}" width="${ph * .6}" height="${ph * 1.15}" fill="transparent"/></g>
       <text x="${x0 + w * .015}" y="${-top + top * .06}" font-size="${top * .04}" fill="#fff" opacity=".9">${W.lbl} · ${pname()}: ${fmtM(ph)}</text>
     </svg>`;
@@ -4250,19 +4407,61 @@ const MAP_SITES = [
     const svg = document.getElementById("szSvg"), g = document.getElementById("szPerson");
     let drag = false;
     const toX = e => { const p = svg.createSVGPoint(); p.x = e.clientX; p.y = e.clientY; return p.matrixTransform(svg.getScreenCTM().inverse()).x; };
-    g.addEventListener("pointerdown", e => { drag = true; g.setPointerCapture(e.pointerId); g.style.cursor = "grabbing"; e.preventDefault(); });
-    g.addEventListener("pointermove", e => { if (!drag) return; const { x0, x1 } = layout(); st.px = Math.max(x0 + .2, Math.min(x1 - .2, toX(e))); g.setAttribute("transform", `translate(${st.px} 0)`); });
+    g.addEventListener("pointerdown", e => { if (!st.dragged) { st.dragged = true; g.querySelectorAll(".sz-bubble").forEach(x => x.remove()); g.querySelector(".sz-drag").classList.add("done"); }
+      drag = true; g.setPointerCapture(e.pointerId); g.style.cursor = "grabbing"; e.preventDefault(); });
+    let pan = null, panned = false;
+    if (isPano()) {
+      svg.addEventListener("pointerdown", e => { if (e.target.closest("#szPerson")) return; pan = { x: e.clientX, sl: stage.scrollLeft }; panned = false; svg.setPointerCapture(e.pointerId); });
+      svg.addEventListener("pointermove", e => { if (!pan) return; const dx = e.clientX - pan.x; if (Math.abs(dx) > 6) panned = true; stage.scrollLeft = pan.sl - dx; });
+      const pend = () => { pan = null; }; svg.addEventListener("pointerup", pend); svg.addEventListener("pointercancel", pend);
+    }
+    g.addEventListener("pointermove", e => { if (!drag) return;
+      if (isPano()) { const r = stage.getBoundingClientRect(); if (e.clientX > r.right - 50) stage.scrollLeft += 14; else if (e.clientX < r.left + 50) stage.scrollLeft -= 14; }
+      const { x0, x1 } = layout(); st.px = Math.max(x0 + .2, Math.min(x1 - .2, toX(e))); g.setAttribute("transform", `translate(${st.px} 0)`); });
     const end = () => { drag = false; g.style.cursor = "grab"; };
+    g.addEventListener("keydown", e => { if (e.key === "ArrowLeft" || e.key === "ArrowRight") { e.preventDefault(); nudge(e.key === "ArrowLeft" ? -1 : 1); } });
     g.addEventListener("pointerup", end); g.addEventListener("pointercancel", end);
-    svg.addEventListener("click", e => { if (e.target.closest("#szPerson")) return; const { x0, x1 } = layout(); st.px = Math.max(x0 + .2, Math.min(x1 - .2, toX(e))); g.setAttribute("transform", `translate(${st.px} 0)`); });
+    svg.addEventListener("click", e => { if (e.target.closest("#szPerson")) return; if (panned) { panned = false; return; } st.dragged = true; g.querySelectorAll(".sz-bubble").forEach(x => x.remove()); const dd = g.querySelector(".sz-drag"); if (dd) dd.classList.add("done"); const { x0, x1 } = layout(); st.px = Math.max(x0 + .2, Math.min(x1 - .2, toX(e))); g.setAttribute("transform", `translate(${st.px} 0)`); });
   }
 
+  /* ◀ ▶ butonlarıyla / klavyeyle adım adım kaydırma */
+  function nudge(dir) {
+    const { x0, x1 } = layout(), step = isPano() ? GAP : Math.max(.1, (x1 - x0) / 14);
+    st.px = Math.max(x0 + .2, Math.min(x1 - .2, st.px + dir * step)); st.dragged = true;
+    const g = document.getElementById("szPerson"); g.setAttribute("transform", `translate(${st.px} 0)`);
+    g.querySelectorAll(".sz-bubble").forEach(x => x.remove()); const d = g.querySelector(".sz-drag"); if (d) d.classList.add("done");
+    showX(st.px);
+  }
+  const nav2 = document.getElementById("szMove");
+  nav2.innerHTML = `<button type="button" class="btn ghost" id="szLeft">◀ ${T("Left", "Sola")}</button>
+    <span id="szMoveTxt"></span>
+    <button type="button" class="btn ghost" id="szRight">${T("Right", "Sağa")} ▶</button>`;
+  const moveTxt = () => { document.getElementById("szMoveTxt").textContent = isPano()
+    ? T("👆 Swipe the scene to walk along the line, drag yourself anywhere", "👆 Sahneyi kaydırarak sırayı gez, kendini istediğin yere sürükle")
+    : T("👆 Drag yourself on the scene, tap a spot, or use the arrows", "👆 Sahnede kendini sürükle, bir yere dokun ya da okları kullan"); };
+  /* hızlı atlama: küçükler / ortalar / devler / ben */
+  stage.insertAdjacentHTML("beforebegin", `<div class="chips sz-jump" id="szJump" hidden>${GROUPS.map((gr, i) => `<button type="button" class="chip" data-gi="${i}">${gr.lbl}</button>`).join("")}<button type="button" class="chip" data-gi="me">📍 ${T("Find me", "Beni bul")}</button></div>`);
+  const jump = document.getElementById("szJump");
+  jump.querySelectorAll(".chip").forEach(b => b.onclick = () => {
+    if (b.dataset.gi === "me") return showX(st.px);
+    const { pos } = panoLayout(), gr = GROUPS[+b.dataset.gi], idx = ALL_SEQ.findIndex(it => gr.test(Math.max(it.L, it.H)));
+    const { x0, pxm } = panoLayout(); stage.scrollTo({ left: (pos[idx] - 1.2 - x0) * pxm, behavior: "smooth" }); });
+  document.getElementById("szLeft").onclick = () => nudge(-1);
+  document.getElementById("szRight").onclick = () => nudge(1);
+
   /* seçimler */
-  const selectItem = id => { st.item = SIZE_ITEMS.find(x => x.id === id); st.px = null;
-    list.querySelectorAll(".size-card").forEach(b => b.classList.toggle("on", b.dataset.id === id)); render(); };
+  const selectItem = id => { st.item = id === "all" ? ALL : SIZE_ITEMS.find(x => x.id === id); st.px = null;
+    list.querySelectorAll(".size-card").forEach(b => b.classList.toggle("on", b.dataset.id === id));
+    allCard.classList.toggle("on", id === "all"); jump.hidden = id !== "all";
+    document.getElementById("szRefs").classList.toggle("sz-off", id === "all");
+    stage.classList.remove("pano"); moveTxt(); render(); };
+  allCard.onclick = () => { selectItem("all"); stage.scrollIntoView({ behavior: "smooth", block: "center" }); };
   list.querySelectorAll(".size-card").forEach(b => b.onclick = () => { selectItem(b.dataset.id); stage.scrollIntoView({ behavior: "smooth", block: "center" }); });
   document.querySelectorAll("#szPoses .chip").forEach(b => b.onclick = () => { document.querySelectorAll("#szPoses .chip").forEach(x => x.classList.remove("on")); b.classList.add("on"); st.pose = b.dataset.p; render(); });
   document.querySelectorAll("#szRefs .chip").forEach(b => b.onclick = () => { b.classList.toggle("on"); st.refs[b.classList.contains("on") ? "add" : "delete"](b.dataset.r); render(); });
+  document.querySelectorAll("#szGender .chip").forEach(b => b.onclick = () => { document.querySelectorAll("#szGender .chip").forEach(x => x.classList.remove("on")); b.classList.add("on"); st.look.gender = b.dataset.g; render(); });
+  [["szSkin", "skin"], ["szHair", "hair"], ["szOutfit", "outfit"]].forEach(([id, key]) => document.querySelectorAll(`#${id} .swatch`).forEach(b => b.onclick = () => {
+    document.querySelectorAll(`#${id} .swatch`).forEach(x => x.classList.remove("on")); b.classList.add("on"); st.look[key] = b.dataset.v; render(); }));
   ["szName", "szH"].forEach(id => document.getElementById(id).addEventListener("input", render));
 
   /* ---------- 📸 fotoğraf ---------- */
@@ -4271,7 +4470,10 @@ const MAP_SITES = [
   setText("szDownload", T("⬇️ Download PNG", "⬇️ PNG indir"));
   document.getElementById("szShoot").onclick = () => {
     const svg = document.getElementById("szSvg").cloneNode(true);
+    svg.querySelectorAll(".sz-drag").forEach(x => x.remove());
     svg.querySelectorAll("text").forEach(t => t.setAttribute("font-family", "Fredoka, Arial, sans-serif"));
+    if (isPano()) { const { x0, top, gh, pxm } = panoLayout();
+      svg.setAttribute("viewBox", `${x0 + stage.scrollLeft / pxm} ${-top} ${stage.clientWidth / pxm} ${top + gh}`); svg.removeAttribute("style"); }
     const vb = svg.viewBox.baseVal, Wp = 1200, Hp = Math.round(Wp * vb.height / vb.width);
     svg.setAttribute("width", Wp); svg.setAttribute("height", Hp);
     const img = new Image();
@@ -4285,7 +4487,7 @@ const MAP_SITES = [
       const cap = document.getElementById("szCaption").value.trim() || `${pname()} & ${st.item.name}`;
       c.fillText(cap.slice(0, 60), cv.width / 2, Hp + pad + 66);
       c.font = "22px Fredoka, Arial, sans-serif"; c.fillStyle = "#5a6678";
-      c.fillText(`${st.item.name}: ${fmtM(st.item.L)} × ${fmtM(st.item.H)} · ${pname()}: ${fmtM(personH())} · The Left-Behind League`, cv.width / 2, Hp + pad + 112);
+      c.fillText(`${isPano() ? `🏁 ${st.item.name}` : `${st.item.name}: ${fmtM(st.item.L)} × ${fmtM(st.item.H)}`} · ${pname()}: ${fmtM(personH())} · The Left-Behind League`, cv.width / 2, Hp + pad + 112);
       cv.hidden = false; document.getElementById("szDownload").hidden = false;
       stage.classList.remove("flash"); void stage.offsetWidth; stage.classList.add("flash");
       cv.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -4302,7 +4504,6 @@ const MAP_SITES = [
   selectItem("mer");
 })();
 
-document.getElementById("szHint").textContent = LANG === "tr" ? "👆 Kendini sürükle ya da sahnede bir yere dokun." : "👆 Drag yourself, or tap anywhere on the scene.";
 </script>
 
 <!-- theme + sky + logo + görünüm -->
